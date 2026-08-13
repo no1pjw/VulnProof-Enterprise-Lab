@@ -1,0 +1,37 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "vulnproof"
+version = "0.1.0"
+description = "Evidence-driven vulnerability validation platform for container and cloud environments."
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "pydantic>=2.7,<3",
+    "typer>=0.12,<1",
+    "PyYAML>=6.0,<7",
+    "rich>=13.7,<15",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0,<9",
+    "pytest-cov>=5.0,<7",
+    "ruff>=0.6,<1",
+]
+
+[project.scripts]
+vulnproof = "vulnproof.cli:app"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/vulnproof"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"
+
+[tool.ruff]
+line-length = 88
+target-version = "py310"
