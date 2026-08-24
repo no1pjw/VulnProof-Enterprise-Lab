@@ -4,8 +4,8 @@ build-backend = "hatchling.build"
 
 [project]
 name = "vulnproof"
-version = "0.1.0"
-description = "Evidence-driven vulnerability validation platform for container and cloud environments."
+version = "0.2.0"
+description = "Evidence-driven security validation automation for authorized lab environments."
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
@@ -35,3 +35,6 @@ addopts = "-ra"
 [tool.ruff]
 line-length = 88
 target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]

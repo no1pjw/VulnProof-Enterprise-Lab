@@ -1,29 +1,9 @@
-from datetime import datetime, timezone
-
-from vulnproof.models import Asset, Finding, ScanReport
+from vulnproof.models import Evidence
 
 
-def test_scan_report_composes_asset_and_finding() -> None:
-    asset = Asset(
-        name="payment-api",
-        environment="lab",
-        criticality="critical",
-        internet_exposed=True,
-    )
-    finding = Finding(
-        vulnerability_id="CVE-2099-0001",
-        package_name="example-package",
-        severity="HIGH",
-        cvss_score=8.1,
-        asset_name=asset.name,
-        source="fixture",
-    )
+def test_evidence_digest_is_deterministic() -> None:
+    first = Evidence.capture("test", "same", {"b": 2, "a": 1})
+    second = Evidence.capture("test", "same", {"a": 1, "b": 2})
 
-    report = ScanReport(
-        asset=asset,
-        findings=[finding],
-        generated_at=datetime.now(timezone.utc),
-    )
-
-    assert report.asset.name == "payment-api"
-    assert report.findings[0].vulnerability_id == "CVE-2099-0001"
+    assert first.sha256 == second.sha256
+    assert len(first.sha256) == 64

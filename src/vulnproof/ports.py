@@ -16,8 +16,7 @@ class Scanner(Protocol):
 
     name: str
 
-    def scan(self, target: str, asset: Asset) -> Sequence[Finding]:
-        ...
+    def scan(self, target: str, asset: Asset) -> Sequence[Finding]: ...
 
 
 class Enricher(Protocol):
@@ -25,15 +24,13 @@ class Enricher(Protocol):
 
     name: str
 
-    def enrich(self, findings: Sequence[Finding]) -> Sequence[Finding]:
-        ...
+    def enrich(self, findings: Sequence[Finding]) -> Sequence[Finding]: ...
 
 
 class RiskScorer(Protocol):
     """Calculate a bounded priority score for each finding."""
 
-    def score(self, finding: Finding, asset: Asset) -> Finding:
-        ...
+    def score(self, finding: Finding, asset: Asset) -> Finding: ...
 
 
 class Reporter(Protocol):
@@ -41,5 +38,4 @@ class Reporter(Protocol):
 
     name: str
 
-    def write(self, report: ScanReport, destination: str) -> None:
-        ...
+    def write(self, report: ScanReport, destination: str) -> None: ...
