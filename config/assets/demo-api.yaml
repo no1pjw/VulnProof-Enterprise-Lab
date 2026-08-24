@@ -1,0 +1,10 @@
+name: demo-api
+environment: lab
+criticality: high
+internet_exposed: false
+owner: vulnproof-lab
+data_classification: public
+validation_enabled: true
+allowed_hosts:
+  - 127.0.0.1
+  - localhost

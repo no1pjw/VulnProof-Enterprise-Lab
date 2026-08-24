@@ -1,0 +1,20 @@
+{
+  "SchemaVersion": 2,
+  "Results": [
+    {
+      "Target": "vulnproof-demo-api",
+      "Class": "lang-pkgs",
+      "Type": "python-pkg",
+      "Vulnerabilities": [
+        {
+          "VulnerabilityID": "VP-LAB-0001",
+          "PkgName": "vulnproof-demo-api",
+          "InstalledVersion": "1.0.0-lab",
+          "FixedVersion": "1.0.1-lab",
+          "Severity": "HIGH",
+          "CVSS": {"lab": {"V3Score": 8.0}}
+        }
+      ]
+    }
+  ]
+}

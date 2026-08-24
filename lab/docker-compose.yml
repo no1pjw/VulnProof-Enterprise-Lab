@@ -1,0 +1,23 @@
+services:
+  vulnerable-api:
+    build: .
+    environment:
+      LAB_MODE: vulnerable
+    ports:
+      - "127.0.0.1:18080:8080"
+    read_only: true
+    tmpfs:
+      - /tmp
+    security_opt:
+      - no-new-privileges:true
+  patched-api:
+    build: .
+    environment:
+      LAB_MODE: patched
+    ports:
+      - "127.0.0.1:18081:8080"
+    read_only: true
+    tmpfs:
+      - /tmp
+    security_opt:
+      - no-new-privileges:true

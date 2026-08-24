@@ -1,0 +1,16 @@
+id: vp-lab-0001
+description: Safely checks whether the synthetic lab debug endpoint is exposed.
+vulnerability_ids:
+  - VP-LAB-0001
+allowed_environments:
+  - lab
+destructive: false
+requires_approval: true
+steps:
+  - name: Observe synthetic debug endpoint
+    method: GET
+    path: /debug/config
+    expected_status: 200
+    body_contains: VULNPROOF_LAB_MARKER
+    timeout_seconds: 5
+    max_response_bytes: 4096

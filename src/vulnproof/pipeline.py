@@ -1,36 +1,37 @@
-"""Application-level orchestration for the initial scan flow."""
+"""Reusable orchestration independent of CLI and vendor adapters."""
 
-from collections.abc import Iterable
 from datetime import datetime, timezone
 
-from .models import Asset, ScanReport
-from .ports import Enricher, RiskScorer, Scanner
+from vulnproof.models import Asset, Finding, RetestReport
+from vulnproof.playbooks import ValidationPlaybook
+from vulnproof.validator import HttpValidator
 
 
-class ScanPipeline:
-    """Coordinate adapters without embedding vendor-specific logic."""
+class RetestPipeline:
+    def __init__(self, validator: HttpValidator | None = None) -> None:
+        self.validator = validator or HttpValidator()
 
-    def __init__(
+    def run(
         self,
-        scanner: Scanner,
-        scorer: RiskScorer,
-        enrichers: Iterable[Enricher] = (),
-    ) -> None:
-        self.scanner = scanner
-        self.scorer = scorer
-        self.enrichers = tuple(enrichers)
-
-    def run(self, target: str, asset: Asset) -> ScanReport:
-        findings = list(self.scanner.scan(target, asset))
-
-        for enricher in self.enrichers:
-            findings = list(enricher.enrich(findings))
-
-        findings = [self.scorer.score(finding, asset) for finding in findings]
-
-        return ScanReport(
-            tool_version=getattr(self.scanner, "version", None),
-            asset=asset,
-            findings=findings,
+        playbook: ValidationPlaybook,
+        finding: Finding,
+        asset: Asset,
+        before_target: str,
+        after_target: str,
+        approved: bool,
+    ) -> RetestReport:
+        before = self.validator.run(
+            playbook, finding, asset, before_target, approved=approved
+        )
+        after = self.validator.run(
+            playbook, finding, asset, after_target, approved=approved
+        )
+        return RetestReport(
+            finding=finding,
+            before=before,
+            after=after,
+            remediation_verified=(
+                before.status == "confirmed" and after.status == "not_confirmed"
+            ),
             generated_at=datetime.now(timezone.utc),
         )
